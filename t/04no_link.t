@@ -2,6 +2,8 @@ use Test::More;
 use Test::Differences;
 use File::Temp qw(tempfile);
 
+$ENV{HARNESS_PERL_SWITCHES} = '' unless defined $ENV{HARNESS_PERL_SWITCHES};
+
 sub build_input {
   my($fh, $filename) = tempfile();
   print $fh @_;

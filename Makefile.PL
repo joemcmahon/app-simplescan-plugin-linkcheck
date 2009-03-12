@@ -10,7 +10,7 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More' => 0,
-        'App::SimpleScan' => 0,
+        'App::SimpleScan' => 1.00,
         'Scalar::Util' => 0,
         'Text::Balanced' => 0,
     },

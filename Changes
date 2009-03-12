@@ -1,5 +1,11 @@
 Revision history for App-SimpleScan-Plugin-LinkCheck
 
+1.00  Mon Mar 20 12:10:30 PST 2006
+	- Now 1.0 interface conformant
+	- per_test changed to filter; now get proper
+	  output in all cases
+	- snapshot special-casing removed; no longer needed
+
 0.02  Wed Feb  8 11:09:16 PST 2006
 	- Get forget_link and forget_all_links working.
 

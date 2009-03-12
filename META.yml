@@ -1,11 +1,11 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         App-SimpleScan-Plugin-LinkCheck
-version:      0.02
+version:      1.00
 version_from: lib/App/SimpleScan/Plugin/LinkCheck.pm
 installdirs:  site
 requires:
-    App::SimpleScan:               0
+    App::SimpleScan:               1
     Scalar::Util:                  0
     Test::More:                    0
     Text::Balanced:                0
