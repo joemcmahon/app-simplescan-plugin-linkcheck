@@ -1,4 +1,8 @@
 Revision history for App-SimpleScan-Plugin-LinkCheck
+1.03  Mon Sep 11 15:31:24 PDT 2006
+	- add snapshot hack: call the snapshot filter for
+	  tests we stack. WIll replace this with something better later.
+
 1.02  Wed Aug  2 13:29:18 PDT 2006
 	- remove @accent from tests
 

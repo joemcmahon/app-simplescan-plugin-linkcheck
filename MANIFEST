@@ -13,5 +13,6 @@ t/04no_link.t
 t/05loop.t
 t/06forget.t
 t/07forget_all.t
+t/08snapshot.t
 t/pod-coverage.t
 t/pod.t

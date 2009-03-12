@@ -1,6 +1,6 @@
 package App::SimpleScan::Plugin::LinkCheck;
 
-$VERSION = '1.02';
+$VERSION = '1.03';
 
 use warnings;
 use strict;
@@ -90,6 +90,8 @@ sub filters {
 
 sub filter {
   my($self, @code) = @_;
+  # If we've recursed because of the stack_code in this method, just exit.
+
   return unless defined $self->_link_conditions;
   my $test_count = 0;
 
@@ -131,8 +133,12 @@ sub filter {
       }
 
       if ($not_bogus) {
+        my $last_testspec  = $self->get_current_spec;
+        $last_testspec->comment( qq('$name' link count $compare $count) );
+
         push @code, qq(cmp_ok scalar \@{[mech()->find_all_links(text=>qq($name))]}, qq($compare), qq($count), "'$name' link count $compare $count";\n);
         $test_count++;
+        @code = _snapshot_hack($self, @code);
       }
     }
   }
@@ -140,6 +146,16 @@ sub filter {
   return @code;
 }
 
+sub _snapshot_hack {
+  # Snapshot MUST be called for every test stacked.
+  my ($self, @code) = @_;
+  if ($self->can('snapshot')) {
+    return &App::SimpleScan::Plugin::Snapshot::filter($self, @code);
+  }
+  else {
+    return @code;
+  }
+}
 
 sub _extract_quotelike_args {
   # Extract strings and backticked strings and just plain words.
