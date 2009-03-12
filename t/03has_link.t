@@ -14,7 +14,7 @@ if (!$simple_scan){
   plan skip_all => 'simple_scan unavailable';
 }
 else {
-  plan tests =>8;
+  plan tests =>12;
   chomp $simple_scan;
 }
 
@@ -23,7 +23,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y CPAN is there
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -50,7 +50,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y CPAN is there
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -73,11 +73,66 @@ unlink $delete_me;
 ########################################
 
 $delete_me = build_input(<<EOS);
+%%has_link "CPAN sites" >
+http://cpan.org/ /CPAN/ Y CPAN is there
+EOS
+
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
+ok((scalar @output), "got output");
+
+$expected = <<EOS;
+use Test::More tests=>2;
+use Test::WWW::Simple;
+use strict;
+
+my \@accent;
+mech->agent_alias('Windows IE 6');
+page_like "http://cpan.org/",
+          qr/CPAN/,
+          qq(CPAN is there [http://cpan.org/] [/CPAN/ should match]);
+fail "Missing count";
+
+EOS
+
+eq_or_diff(join("",@output), $expected, "output matches");
+unlink $delete_me;
+
+########################################
+
+$delete_me = build_input(<<EOS);
+%%has_link "CPAN sites" glorm
+http://cpan.org/ /CPAN/ Y CPAN is there
+EOS
+
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
+ok((scalar @output), "got output");
+
+$expected = <<EOS;
+use Test::More tests=>3;
+use Test::WWW::Simple;
+use strict;
+
+my \@accent;
+mech->agent_alias('Windows IE 6');
+page_like "http://cpan.org/",
+          qr/CPAN/,
+          qq(CPAN is there [http://cpan.org/] [/CPAN/ should match]);
+fail "glorm is not a legal comparison operator (use < > <= >= == !=)";
+fail "Missing count";
+
+EOS
+
+eq_or_diff(join("",@output), $expected, "output matches");
+unlink $delete_me;
+
+########################################
+
+$delete_me = build_input(<<EOS);
 %%has_link "CPAN sites" glorm splat
 http://cpan.org/ /CPAN/ Y CPAN is there
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -105,7 +160,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y CPAN is there
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -134,7 +189,7 @@ http://cpan.org /CPAN/ Y Got the site
 CMDS
 close $fh;
 
-@output = `$^X -Iblib/lib $simple_scan <$filename`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan <$filename`;
 $expected = <<EOS;
 1..3
 ok 1 - Got the site [http://cpan.org] [/CPAN/ should match]

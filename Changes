@@ -1,5 +1,8 @@
 Revision history for App-SimpleScan-Plugin-LinkCheck
 
-0.0.1  Wed Feb  1 16:26:00 2006
-       Initial release.
+0.02  Wed Feb  8 11:09:16 PST 2006
+	- Get forget_link and forget_all_links working.
+
+0.01  Wed Feb  1 16:26:00 2006
+	- Initial release.
 

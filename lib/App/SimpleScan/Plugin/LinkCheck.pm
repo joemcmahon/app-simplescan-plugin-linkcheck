@@ -1,6 +1,6 @@
 package App::SimpleScan::Plugin::LinkCheck;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use warnings;
 use strict;
@@ -23,9 +23,9 @@ sub import {
 
 sub pragmas {
   return ['has_link', \&_do_has_link],
-         ['no_link',  \&_do_no_link];
+         ['no_link',  \&_do_no_link],
          ['forget_link', \&_do_forget_link],
-         ['forget_all_links', \&do_forget_all];
+         ['forget_all_links', \&_do_forget_all];
 }
 
 sub init {
@@ -35,14 +35,14 @@ sub init {
 
 sub _do_forget_all {
   my($self, $args) = @_;
-  $self->app->{Link_conditions} = {};
+  $self->{Link_conditions} = {};
 }
 
 sub _do_forget_link {
   my($self, $args) = @_;
   my @links = $self->_extract_quotelike_args($args);
   for my $link (@links) {
-    delete $self->app->{Link_conditions}->{$link};
+    delete $self->{Link_conditions}->{$link};
   }
 }
 
@@ -104,22 +104,12 @@ sub per_test {
         $count   = "0";
       }
 
-      if (!defined $name) {
-        push @code, qq(fail "Missing name";\n);
-        $test_count++;
-        $not_bogus = 0;
-      }
-      else {
-        # de-quote if necessary
-        $name = eval $name if ($name =~ /^['"]/);
-      }
+      # Name is always defined, or we'd never have gotten here.
+      $name = _dequote($name);
 
-      if (!defined($compare)) {
-        push @code, qq(fail "Missing comparison operator (use < > <= >= == !=)";\n);
-        $test_count++;
-        $not_bogus = 0;
-      }
-      elsif (! grep {$compare eq $_} qw(== > < >= <= !=) ) {
+      # comparison is always defined: either we fixed it just above (because
+      # it was missing altogether), or it's there (but possibly bad).
+      if (! grep {$compare eq $_} qw(== > < >= <= !=) ) {
         push @code, qq(fail "$compare is not a legal comparison operator (use < > <= >= == !=)";\n);
         $test_count++;
         $not_bogus = 0;
@@ -175,9 +165,15 @@ sub _extract_quotelike_args {
   my @wanted;
   foreach my $item 
     (extract_multiple($string, [qr/[^'"`\s]+/,\&extract_quotelike])) {
-    push @wanted, $item if $item !~ /^\s/;
+    push @wanted, _dequote($item) if $item !~ /^\s/;
   }
   return @wanted;
+}
+
+sub _dequote {
+  my $string = shift;
+  $string = eval $string if $string =~ /^(['"]).*(\1)$/;
+  return $string;
 }
 
 

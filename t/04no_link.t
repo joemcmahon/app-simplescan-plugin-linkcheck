@@ -23,7 +23,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y Load page
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -50,7 +50,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y Load page
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
@@ -77,7 +77,7 @@ $delete_me = build_input(<<EOS);
 http://cpan.org/ /CPAN/ Y Load page
 EOS
 
-@output = `$^X -Iblib/lib $simple_scan --gen < $delete_me`;
+@output = `$^X $ENV{HARNESS_PERL_SWITCHES} -Iblib/lib $simple_scan --gen < $delete_me`;
 ok((scalar @output), "got output");
 
 $expected = <<EOS;
