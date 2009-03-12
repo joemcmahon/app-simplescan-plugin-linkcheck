@@ -33,7 +33,6 @@ use Test::More tests=>2;
 use Test::WWW::Simple;
 use strict;
 
-my \@accent;
 mech->agent_alias('Windows IE 6');
 fail "No arguments for %%no_link";
 page_like "http://cpan.org/",
@@ -60,7 +59,6 @@ use Test::More tests=>2;
 use Test::WWW::Simple;
 use strict;
 
-my \@accent;
 mech->agent_alias('Windows IE 6');
 page_like "http://cpan.org/",
           qr/CPAN/,
@@ -87,7 +85,6 @@ use Test::More tests=>2;
 use Test::WWW::Simple;
 use strict;
 
-my \@accent;
 mech->agent_alias('Windows IE 6');
 page_like "http://cpan.org/",
           qr/CPAN/,

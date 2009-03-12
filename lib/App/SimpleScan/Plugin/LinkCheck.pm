@@ -1,6 +1,6 @@
 package App::SimpleScan::Plugin::LinkCheck;
 
-$VERSION = '1.00';
+$VERSION = '1.02';
 
 use warnings;
 use strict;
